@@ -61,13 +61,13 @@ def checkValid(stacks,max_height):
 if __name__ == "__main__":
     max_height = int(input())
     stacks = list(map(parse,input().split(';')))
-    # goal = list(map(parse,input().split(';')))
+    goal = list(map(parse,input().split(';')))
 
     initial = Node(stacks, max_height)
     initial.possibleChildren()
-    # for i in range(len(goal)):
-    #     if checkValid(goal[i],max_height):
-    #         print('Not valid')
+    if not checkValid(goal, max_height):
+        print('No solution found')
+        exit()
     if not checkValid(initial.state, max_height):
         print('No solution found')
         exit()
