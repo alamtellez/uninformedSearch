@@ -1,12 +1,3 @@
-'''
-Input:
-2
-(A); (B); (C)
-(A, C); X; X
-Output:
-3
-(2, 0)
-'''
 import heapq
 from copy import deepcopy
 visited = set()
@@ -122,5 +113,3 @@ if __name__ == "__main__":
         # If node isnt goal, expand it nd continue searching
         for i in range(len(current.children)):
             heapq.heappush(min_heap, current.children[i])
-
-        
