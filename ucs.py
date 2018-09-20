@@ -1,9 +1,8 @@
 '''
 Input:
 2
-(A, D); (B); (C)
+(A); (B); (C)
 (A, C); X; X
-
 Output:
 3
 (2, 0)
@@ -16,6 +15,7 @@ class Node():
         self.parent = None
         self.state = deepcopy(stacks)
         self.path_cost = 0
+        self.heuristic_cost = 0
         self.action = None
         self.children = []
         self.stacksize = sz
@@ -25,6 +25,8 @@ class Node():
         move = self.action
         item = self.state[move[0]].pop()
         self.state[move[1]].append(item)
+        self.path_cost = self.parent.path_cost + 1 + abs(move[1] - move[0])
+
 
     def setKey(self):
         for i in range(len(self.state)):
@@ -37,11 +39,19 @@ class Node():
             for j in range(len(self.state)):
                 if len(self.state[i]) > 0:
                     if i != j and len(self.state[j]) < self.stacksize:
-                        new = Node(self.state, self.stacksize)
-                        new.action = (i,j)
-                        new.applyAction()
-                        new.setKey()
-                        self.children.append(new)
+                        auxNode = Node(self.state, self.stacksize)
+                        auxNode.action = (i,j)
+                        auxNode.parent = self
+                        auxNode.applyAction()
+                        auxNode.setKey()
+                        self.children.append(auxNode)
+                        print(auxNode.state[2][0])
+
+    def calcHeuristic(self, goal):
+        for i in range(len(self.state)):
+            for j in range(len(self.state)):
+                if(self.state[i][j] != goal.state[i][j]):
+                    heuristic_cost = 0
 
 
 
