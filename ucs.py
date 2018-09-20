@@ -77,7 +77,7 @@ def is_goal(node, goal):
 if __name__ == "__main__":
     visited = []
     min_heap = []
-
+    count = 0
     max_height = int(input())
     stacks = list(map(parse,input().split(';')))
     goal = list(map(parse,input().split(';')))
@@ -100,6 +100,7 @@ if __name__ == "__main__":
             exit()
         # Take out the first/smallest element to evaluate if it is our goal
         current = heapq.heappop(min_heap)
+        count += 1
         visited.append(current)
         # Expand the node
         current.possibleChildren()
@@ -109,6 +110,7 @@ if __name__ == "__main__":
             path = []
             print_action(current, path)
             print("; ".join(map(str, path)))
+            #print(count)
             break
         # If node isnt goal, expand it nd continue searching
         for i in range(len(current.children)):

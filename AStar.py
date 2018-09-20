@@ -3,13 +3,17 @@ Input:
 2
 (A); (B); (C)
 (A, C); X; X
+
+7
+(A, C, D); (T, Y); ()
+(C); (D, A); X
 Output:
 3
 (2, 0)
 '''
 import heapq
 from copy import deepcopy
-from random import random
+import random
 
 visited = set()
 
@@ -53,16 +57,20 @@ class Node():
                         auxNode.parent = self
                         auxNode.applyAction()
                         auxNode.setKey()
+                        # To use a consistent or inconsistent heuristic
+                        # just comment one of the lines below
+                        # auxNode.calcInconsistentHeuristic()
                         auxNode.calcHeuristicCost(goal)
                         self.children.append(auxNode)
 
     # A consistent heuristic that increases whenever a container
     # is not in the goal state
     def calcHeuristicCost(self, goal):
-        for i in range(len(self.state)):
-            for j in range(min(len(goal.state[i]), len(self.state[i]))):
-                if(self.state[i][j] != goal.state[i][j]):
-                    self.heuristic_cost += 1
+        for i in range(len(goal.state)):
+            if(self.state[i] != list() and goal.state[i] != list()):
+                for j in range(min(len(goal.state[i]), len(self.state[i]))):
+                    if(self.state[i][j] != goal.state[i][j]):
+                        self.heuristic_cost += 1
         self.f_cost = self.heuristic_cost + self.path_cost
 
     # This is an inconsistent heuristic that will most likely
@@ -110,7 +118,7 @@ if __name__ == "__main__":
     max_height = int(input())
     stacks = list(map(parse,input().split(';')))
     goal = list(map(parse,input().split(';')))
-
+    count = 0
     initial = Node(stacks, max_height)
     goalNode = Node(goal, max_height)
 
@@ -120,20 +128,27 @@ if __name__ == "__main__":
     if not checkValid(initial.state, max_height):
         print('No solution found')
         exit()
-        
+
     heapq.heappush(min_heap, initial)
     while(True):
+        # If there are no elements in thequeue then there is n solution
         if(len(min_heap) == 0):
             print("No solution found")
             exit()
+        # Take out the first/smallest element to evaluate if it is our goal
         current = heapq.heappop(min_heap)
+        count += 1
         visited.append(current)
+        # Expand the node
         current.possibleChildren(goalNode)
+        # Check if the node is our goal
         if is_goal(current, goalNode):
             print(current.f_cost)
             path = []
             print_action(current, path)
             print("; ".join(map(str, path)))
+            #print(count)
             break
+        # If node isnt goal, expand it nd continue searching
         for i in range(len(current.children)):
             heapq.heappush(min_heap, current.children[i])
