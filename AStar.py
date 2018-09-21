@@ -37,7 +37,7 @@ class Node():
         move = self.action
         item = self.state[move[0]].pop()
         self.state[move[1]].append(item)
-        self.path_cost = self.parent.path_cost + 1 + abs(move[1] - move[0]) + self.heuristic_cost
+        self.path_cost = self.parent.path_cost + 1 + abs(move[1] - move[0])
 
     # Optional key for visited if needed
     def setKey(self):
