@@ -43,7 +43,7 @@ class Node():
     def setKey(self):
         for i in range(len(self.state)):
             for j in range(len(self.state[i])):
-                self.key += str(j)
+                self.key += str(self.state[i][j])
             self.key += ";"
 
     # Function that expands the node to the possible children
@@ -136,6 +136,7 @@ if __name__ == "__main__":
             exit()
         # Take out the first/smallest element to evaluate if it is our goal
         current = heapq.heappop(min_heap)
+        # print(current.key)
         count += 1
         if current.key not in visited:
             visited.add(current.key)
