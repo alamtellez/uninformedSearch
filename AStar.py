@@ -143,7 +143,7 @@ if __name__ == "__main__":
         current.possibleChildren(goalNode)
         # Check if the node is our goal
         if is_goal(current, goalNode):
-            print(current.f_cost)
+            print(current.path_cost)
             path = []
             print_action(current, path)
             print("; ".join(map(str, path)))
