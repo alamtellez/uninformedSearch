@@ -6,7 +6,7 @@ Input:
 
 7
 (A, C, D); (T, Y); ()
-(C); (D, A); X
+(C); (D, Y); (A, T)
 Output:
 3
 (2, 0)
@@ -15,7 +15,7 @@ import heapq
 from copy import deepcopy
 import random
 
-visited = set()
+
 
 # Node class definition
 class Node():
@@ -112,9 +112,8 @@ def is_goal(node, goal):
 
 
 if __name__ == "__main__":
-    visited = []
     min_heap = []
-
+    visited = set()
     max_height = int(input())
     stacks = list(map(parse,input().split(';')))
     goal = list(map(parse,input().split(';')))
@@ -138,17 +137,18 @@ if __name__ == "__main__":
         # Take out the first/smallest element to evaluate if it is our goal
         current = heapq.heappop(min_heap)
         count += 1
-        visited.append(current)
-        # Expand the node
-        current.possibleChildren(goalNode)
-        # Check if the node is our goal
-        if is_goal(current, goalNode):
-            print(current.f_cost)
-            path = []
-            print_action(current, path)
-            print("; ".join(map(str, path)))
-            #print(count)
-            break
-        # If node isnt goal, expand it nd continue searching
-        for i in range(len(current.children)):
-            heapq.heappush(min_heap, current.children[i])
+        if current.key not in visited:
+            visited.add(current.key)
+            # Expand the node
+            current.possibleChildren(goalNode)
+            # Check if the node is our goal
+            if is_goal(current, goalNode):
+                print(current.path_cost)
+                path = []
+                print_action(current, path)
+                print("; ".join(map(str, path)))
+                #print(count)
+                break
+            # If node isnt goal, expand it nd continue searching
+            for i in range(len(current.children)):
+                heapq.heappush(min_heap, current.children[i])
